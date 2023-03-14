@@ -1,0 +1,66 @@
+[
+    {
+        "name": "Knife",
+        "price": 0,
+        "damage_per_hit": 43,
+        "money_per_kill": 500,
+        "type": "melee",
+        "available_for": "all"
+    },
+    {
+        "name": "AWP",
+        "price": 4300,
+        "damage_per_hit": 110,
+        "money_per_kill": 50,
+        "type": "heavy",
+        "available_for": "all"
+    },
+    {
+        "name": "AK",
+        "price": 2700,
+        "damage_per_hit": 31,
+        "money_per_kill": 100,
+        "type": "heavy",
+        "available_for": "terrorist"
+    },
+    {
+        "name": "Glock-18",
+        "price": 300,
+        "damage_per_hit": 11,
+        "money_per_kill": 200,
+        "type": "pistol",
+        "available_for": "terrorist"
+    },
+    {
+        "name": "Revolver",
+        "price": 600,
+        "damage_per_hit": 51,
+        "money_per_kill": 150,
+        "type": "pistol",
+        "available_for": "terrorist"
+    },
+    {
+        "name": "M4A1",
+        "price": 2700,
+        "damage_per_hit": 29,
+        "money_per_kill": 100,
+        "type": "heavy",
+        "available_for": "counter_terrorist"
+    },
+    {
+        "price": 300,
+        "name": "UPS-S",
+        "damage_per_hit": 13,
+        "money_per_kill": 225,
+        "type": "pistol",
+        "available_for": "counter_terrorist"
+    },
+    {
+        "name": "Desert-Eagle",
+        "price": 600,
+        "damage_per_hit": 53,
+        "money_per_kill": 175,
+        "type": "pistol",
+        "available_for": "counter_terrorist"
+    }
+]

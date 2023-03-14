@@ -96,3 +96,15 @@ add_library(
     Interactions.h
     Interactions.cpp
 )
+
+find_package(nlohmann_json REQUIRED)
+
+target_link_libraries(
+    CSxD
+    nlohmann_json::nlohmann_json
+)
+
+target_link_libraries(
+    CSxDLib
+    nlohmann_json::nlohmann_json
+)
