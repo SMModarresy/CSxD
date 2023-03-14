@@ -113,14 +113,8 @@ Side GamePlay::determine_winner_and_go_next_round() const {
     catch (const LastRoundException& ex) {
         game->end();
     }
-    uint counter_terrorist_alive_count = game->get_alive_player_count(COUNTER_TERRORIST);
-    uint terrorist_alive_count = game->get_alive_player_count(TERRORIST);
-    Side winner_side = COUNTER_TERRORIST;
-    Side loser_side = TERRORIST;
-    if (terrorist_alive_count > 0 && counter_terrorist_alive_count == 0) {
-        winner_side = TERRORIST;
-        loser_side = COUNTER_TERRORIST;
-    }
+    Side winner_side, loser_side;
+    find_winner_loser(winner_side, loser_side);
     for (const auto& player : game->get_all_players(winner_side)) {
         player->reset_hp();
         player->add_money(WINNER_MONEY_PER_ROUND);
@@ -155,4 +149,17 @@ vector<shared_ptr<Player>> GamePlay::get_scoreboard(Side side) const {
 
 bool GamePlay::has_ended() const {
     return game->has_ended();
+}
+
+void GamePlay::find_winner_loser(Side& winner_side, Side& loser_side) const {
+    uint counter_terrorist_alive_count = game->get_alive_player_count(COUNTER_TERRORIST);
+    uint terrorist_alive_count = game->get_alive_player_count(TERRORIST);
+    if (terrorist_alive_count > 0 && counter_terrorist_alive_count == 0) {
+        winner_side = TERRORIST;
+        loser_side = COUNTER_TERRORIST;
+    }
+    else {
+        winner_side = COUNTER_TERRORIST;
+        loser_side = TERRORIST;
+    }
 }

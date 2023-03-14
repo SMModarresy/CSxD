@@ -29,6 +29,8 @@ public:
     virtual bool has_ended() const;
 
 protected:
+    virtual void find_winner_loser(Side& winner_side, Side& loser_side) const;
+
     const ull ROUND_LENGTH = (2 * 60 + 15) * 1000;
     const ull ENTER_TIME_LIMIT = 3 * 1000;
     const ull BUY_TIME_LIMIT = 45 * 1000;
