@@ -19,10 +19,10 @@ public:
     virtual ~GamePlay() = default;
     virtual void set_round_time(ull time) const;
     virtual shared_ptr<Player> create_player(const string& name, Side side) const;
-    virtual void add_player(const shared_ptr<Player> &player) const;
+    virtual void add_player(const shared_ptr<Player>& player) const;
     virtual uint get_hp(const string& player_name) const;
     virtual uint get_money(const string& player_name) const;
-    virtual void buy_weapon(const string& player_name, const shared_ptr<Weapon> &weapon) const;
+    virtual void buy_weapon(const string& player_name, const shared_ptr<Weapon>& weapon) const;
     virtual void attack_occurred(const string& attacker_name, const string& attacked_name, WeaponType weapon_type) const;
     virtual Side determine_winner_and_go_next_round() const;
     virtual vector<shared_ptr<Player>> get_scoreboard(Side side) const;

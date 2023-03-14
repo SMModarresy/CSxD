@@ -27,25 +27,25 @@ void GamePlay::set_round_time(ull time) const {
     game->set_round_time(time);
 }
 
-shared_ptr<Player> GamePlay::create_player(const string &name, Side side) const {
+shared_ptr<Player> GamePlay::create_player(const string& name, Side side) const {
     auto player = make_shared<Player>(name, game->get_round_time() >= ENTER_TIME_LIMIT ? 0 : 100, PLAYER_MAX_MONEY, PLAYER_INITIAL_MONEY, side, game->get_game_time());
     player->equip_weapon(Data::get_weapon_by_name("Knife"));
     return player;
 }
 
-void GamePlay::add_player(const shared_ptr<Player> &player) const {
+void GamePlay::add_player(const shared_ptr<Player>& player) const {
     game->add_player(player);
 }
 
-uint GamePlay::get_hp(const string &player_name) const {
+uint GamePlay::get_hp(const string& player_name) const {
     return game->get_player_by_name(player_name)->get_hp();
 }
 
-uint GamePlay::get_money(const string &player_name) const {
+uint GamePlay::get_money(const string& player_name) const {
     return game->get_player_by_name(player_name)->get_money();
 }
 
-void GamePlay::buy_weapon(const string &player_name, const shared_ptr<Weapon> &weapon) const {
+void GamePlay::buy_weapon(const string& player_name, const shared_ptr<Weapon>& weapon) const {
     auto player = game->get_player_by_name(player_name);
     if(!player->is_alive()) {
         throw ActionFromDeadPlayerException();
@@ -72,7 +72,7 @@ void GamePlay::buy_weapon(const string &player_name, const shared_ptr<Weapon> &w
     player->equip_weapon(weapon);
 }
 
-void GamePlay::attack_occurred(const string &attacker_name, const string &attacked_name, WeaponType weapon_type) const {
+void GamePlay::attack_occurred(const string& attacker_name, const string& attacked_name, WeaponType weapon_type) const {
     auto attacker = game->get_player_by_name(attacker_name);
     auto attacked = game->get_player_by_name(attacked_name);
     if (!attacker->is_alive()) {

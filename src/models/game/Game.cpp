@@ -72,7 +72,7 @@ bool Game::has_ended() const {
 
 vector<shared_ptr<Player>> Game::get_all_players(Side side) const {
     vector<shared_ptr<Player>> player_list;
-    for (const auto &player: players) {
+    for (const auto& player: players) {
         if(side & player.second->get_side()) {
             player_list.push_back(player.second);
         }

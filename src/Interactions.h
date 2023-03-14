@@ -16,8 +16,8 @@ using namespace std;
 
 class Interactions {
 public:
-    static void set_input_stream(istream &stream);
-    static void set_output_stream(ostream &stream);
+    static void set_input_stream(istream& stream);
+    static void set_output_stream(ostream& stream);
     static void init();
     static uint get_rounds();
     static void set_game_play(shared_ptr<GamePlay> game_play);
@@ -35,8 +35,8 @@ private:
     static Side get_side_from_string(const string& side);
     static WeaponType get_weapon_type_from_string(const string& weapon_type);
 
-    static istream *in;
-    static ostream *out;
+    static istream* in;
+    static ostream* out;
     static uint rounds;
     static shared_ptr<GamePlay> game_play;
 };

@@ -20,11 +20,11 @@ ostream* Interactions::out = &cout;
 uint Interactions::rounds;
 shared_ptr<GamePlay> Interactions::game_play;
 
-void Interactions::set_input_stream(istream &stream) {
+void Interactions::set_input_stream(istream& stream) {
     in = &stream;
 }
 
-void Interactions::set_output_stream(ostream &stream) {
+void Interactions::set_output_stream(ostream& stream) {
     out = &stream;
 }
 
