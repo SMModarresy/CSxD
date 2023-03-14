@@ -16,6 +16,8 @@ public:
     static shared_ptr<Weapon> get_weapon_by_name(const string& name);
 
 private:
+    static void load_weapons();
+
     static unordered_map<string, shared_ptr<Weapon>> weapons;
 };
 

@@ -3,7 +3,7 @@
 
 unordered_map<string, shared_ptr<Weapon>> Data::weapons;
 
-void Data::load() {
+void Data::load_weapons() {
     weapons["Desert-Eagle"] = make_shared<Weapon>("Desert-Eagle", 600, 53, 175, PISTOL, COUNTER_TERRORIST);
     weapons["UPS-S"] = make_shared<Weapon>("UPS-S", 300, 13, 225, PISTOL, COUNTER_TERRORIST);
     weapons["M4A1"] = make_shared<Weapon>("M4A1", 2700, 29, 100, HEAVY, COUNTER_TERRORIST);
@@ -12,6 +12,10 @@ void Data::load() {
     weapons["AK"] = make_shared<Weapon>("AK", 2700, 31, 100, HEAVY, TERRORIST);
     weapons["AWP"] = make_shared<Weapon>("AWP", 4300, 110, 50, HEAVY, ALL);
     weapons["Knife"] = make_shared<Weapon>("Knife", 0, 43, 500, MELEE, ALL);
+}
+
+void Data::load() {
+    load_weapons();
 }
 
 shared_ptr<Weapon> Data::get_weapon_by_name(const string& name) {
