@@ -17,6 +17,7 @@ public:
     explicit GamePlay(shared_ptr<Game> for_game);
     explicit GamePlay(uint rounds);
     virtual ~GamePlay() = default;
+
     virtual void set_round_time(ull time) const;
     virtual shared_ptr<Player> create_player(const string& name, Side side) const;
     virtual void add_player(const shared_ptr<Player>& player) const;

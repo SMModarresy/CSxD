@@ -11,6 +11,7 @@
 class MockWeapon : public Weapon {
 public:
     MockWeapon() : Weapon("", 0, 0, 0, MELEE, ALL) { }
+
     MOCK_METHOD(string, get_name, (), (const, override));
     MOCK_METHOD(uint, get_price, (), (const, override));
     MOCK_METHOD(uint, get_damage_per_hit, (), (const, override));

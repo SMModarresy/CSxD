@@ -16,6 +16,7 @@ class Game {
 public:
     Game(int id, uint rounds, ull round_length, size_t max_team_size);
     virtual ~Game() = default;
+
     virtual ull get_id() const;
     virtual uint get_rounds() const;
     virtual uint get_current_round() const;

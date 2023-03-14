@@ -11,6 +11,7 @@
 class MockPlayer : public Player {
 public:
     MockPlayer() : Player("", 0, 0, 0, COUNTER_TERRORIST, 0) { }
+
     MOCK_METHOD(uint, get_hp, (), (const, override));
     MOCK_METHOD(void, add_hp, (uint added_hp), (override));
     MOCK_METHOD(void, take_damage, (uint damage), (override));

@@ -19,6 +19,7 @@ class Player {
 public:
     Player(string name, uint initial_hp, uint max_money, uint initial_money, Side side, ull entry_time);
     virtual ~Player() = default;
+
     virtual uint get_hp() const;
     virtual void add_hp(uint added_hp);
     virtual void take_damage(uint damage);

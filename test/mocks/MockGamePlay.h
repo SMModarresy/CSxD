@@ -11,6 +11,7 @@
 class MockGamePlay : public GamePlay {
 public:
     MockGamePlay() : GamePlay(1) { }
+
     MOCK_METHOD(void, set_round_time, (ull time), (const, override));
     MOCK_METHOD(shared_ptr<Player>, create_player, (const string& name, Side side), (const, override));
     MOCK_METHOD(void, add_player, (const shared_ptr<Player>& player), (const, override));

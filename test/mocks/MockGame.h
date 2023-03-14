@@ -11,6 +11,7 @@
 class MockGame : public Game {
 public:
     MockGame() : Game(0, 1, 1, 1) { }
+
     MOCK_METHOD(ull, get_id, (), (const, override));
     MOCK_METHOD(uint, get_rounds, (), (const, override));
     MOCK_METHOD(uint, get_current_round, (), (const, override));
