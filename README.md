@@ -9,7 +9,8 @@ git clone https://github.com/SMModarresy/CSxD.git
 cd CSxD
 cmake CMakeLists.txt
 make
-./src/CSxD
+cd src
+./CSxD
 ```
 
 # UML
