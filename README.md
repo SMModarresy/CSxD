@@ -12,6 +12,7 @@ make
 cd src
 ./CSxD
 ```
+If you're using CLion, make sure to set the working directory to `$PROJECT_DIR$/src` for the json file to be loaded
 
 # UML
 ![UML Diagram](CSxD.drawio.svg)
