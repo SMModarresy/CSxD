@@ -78,13 +78,14 @@ TEST(InteractionsTest, AddUserAlreadyInTeamAssertions) {
 
     auto mock_game_play = make_shared<MockGamePlay>();
 
+    ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
+        .WillByDefault(Return(COUNTER_TERRORIST));
+
     EXPECT_CALL(*mock_game_play, has_ended())
         .WillOnce(Return(false))
         .WillOnce(Return(true));
     EXPECT_CALL(*mock_game_play, add_player)
         .WillOnce(Throw(PlayerAlreadyInTeamException()));
-    ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
-        .WillByDefault(Return(COUNTER_TERRORIST));
 
     Interactions::init();
     Interactions::set_game_play(mock_game_play);
@@ -104,13 +105,14 @@ TEST(InteractionsTest, AddUserInOpponentTeamAssertions) {
 
     auto mock_game_play = make_shared<MockGamePlay>();
 
+    ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
+        .WillByDefault(Return(COUNTER_TERRORIST));
+
     EXPECT_CALL(*mock_game_play, has_ended())
         .WillOnce(Return(false))
         .WillOnce(Return(true));
     EXPECT_CALL(*mock_game_play, add_player)
         .WillOnce(Throw(PlayerInOpponentTeamException()));
-    ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
-        .WillByDefault(Return(COUNTER_TERRORIST));
 
     Interactions::init();
     Interactions::set_game_play(mock_game_play);
@@ -130,13 +132,14 @@ TEST(InteractionsTest, AddUserFullTeamAssertions) {
 
     auto mock_game_play = make_shared<MockGamePlay>();
 
+    ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
+        .WillByDefault(Return(COUNTER_TERRORIST));
+
     EXPECT_CALL(*mock_game_play, has_ended())
         .WillOnce(Return(false))
         .WillOnce(Return(true));
     EXPECT_CALL(*mock_game_play, add_player)
         .WillOnce(Throw(TeamIsFullException()));
-    ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
-        .WillByDefault(Return(COUNTER_TERRORIST));
 
     Interactions::init();
     Interactions::set_game_play(mock_game_play);
@@ -156,6 +159,9 @@ TEST(InteractionsTest, GetHealthAssertions) {
 
     auto mock_game_play = make_shared<MockGamePlay>();
 
+    ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
+        .WillByDefault(Return(COUNTER_TERRORIST));
+
     EXPECT_CALL(*mock_game_play, has_ended())
         .WillOnce(Return(false))
         .WillOnce(Return(true));
@@ -163,8 +169,6 @@ TEST(InteractionsTest, GetHealthAssertions) {
         .Times(1);
     EXPECT_CALL(*mock_game_play, get_hp("Player"))
         .WillOnce(Return(63));
-    ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
-        .WillByDefault(Return(COUNTER_TERRORIST));
 
     Interactions::init();
     Interactions::set_game_play(mock_game_play);
@@ -184,13 +188,14 @@ TEST(InteractionsTest, GetHealthNonExistingPlayerAssertions) {
 
     auto mock_game_play = make_shared<MockGamePlay>();
 
+    ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
+        .WillByDefault(Return(COUNTER_TERRORIST));
+
     EXPECT_CALL(*mock_game_play, has_ended())
         .WillOnce(Return(false))
         .WillOnce(Return(true));
     EXPECT_CALL(*mock_game_play, get_hp)
         .WillOnce(Throw(PlayerNotFoundException()));
-    ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
-        .WillByDefault(Return(COUNTER_TERRORIST));
 
     Interactions::init();
     Interactions::set_game_play(mock_game_play);
@@ -210,6 +215,9 @@ TEST(InteractionsTest, GetMoneyAssertions) {
 
     auto mock_game_play = make_shared<MockGamePlay>();
 
+    ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
+        .WillByDefault(Return(COUNTER_TERRORIST));
+
     EXPECT_CALL(*mock_game_play, has_ended())
         .WillOnce(Return(false))
         .WillOnce(Return(true));
@@ -217,8 +225,6 @@ TEST(InteractionsTest, GetMoneyAssertions) {
         .Times(1);
     EXPECT_CALL(*mock_game_play, get_money("Player"))
         .WillOnce(Return(3700));
-    ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
-        .WillByDefault(Return(COUNTER_TERRORIST));
 
     Interactions::init();
     Interactions::set_game_play(mock_game_play);
@@ -238,13 +244,14 @@ TEST(InteractionsTest, GetMoneyNonExistingPlayerAssertions) {
 
     auto mock_game_play = make_shared<MockGamePlay>();
 
+    ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
+        .WillByDefault(Return(COUNTER_TERRORIST));
+
     EXPECT_CALL(*mock_game_play, has_ended())
         .WillOnce(Return(false))
         .WillOnce(Return(true));
     EXPECT_CALL(*mock_game_play, get_money)
         .WillOnce(Throw(PlayerNotFoundException()));
-    ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
-        .WillByDefault(Return(COUNTER_TERRORIST));
 
     Interactions::init();
     Interactions::set_game_play(mock_game_play);
@@ -265,6 +272,9 @@ TEST(InteractionsTest, BuyAssertions) {
 
     auto mock_game_play = make_shared<MockGamePlay>();
 
+    ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
+        .WillByDefault(Return(COUNTER_TERRORIST));
+
     EXPECT_CALL(*mock_game_play, has_ended)
         .WillOnce(Return(false))
         .WillOnce(Return(true));
@@ -272,8 +282,6 @@ TEST(InteractionsTest, BuyAssertions) {
         .Times(1);
     EXPECT_CALL(*mock_game_play, buy_weapon("Player", Eq(Data::get_weapon_by_name("AWP"))))
         .Times(1);
-    ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
-        .WillByDefault(Return(COUNTER_TERRORIST));
 
     Interactions::init();
     Interactions::set_game_play(mock_game_play);
@@ -293,13 +301,14 @@ TEST(InteractionsTest, BuyNonExistingPlayerAssertions) {
 
     auto mock_game_play = make_shared<MockGamePlay>();
 
+    ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
+        .WillByDefault(Return(COUNTER_TERRORIST));
+
     EXPECT_CALL(*mock_game_play, has_ended())
         .WillOnce(Return(false))
         .WillOnce(Return(true));
     EXPECT_CALL(*mock_game_play, buy_weapon)
         .WillOnce(Throw(PlayerNotFoundException()));
-    ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
-        .WillByDefault(Return(COUNTER_TERRORIST));
 
     Interactions::init();
     Interactions::set_game_play(mock_game_play);
@@ -319,13 +328,14 @@ TEST(InteractionsTest, BuyDeadPlayerAssertions) {
 
     auto mock_game_play = make_shared<MockGamePlay>();
 
+    ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
+        .WillByDefault(Return(COUNTER_TERRORIST));
+
     EXPECT_CALL(*mock_game_play, has_ended())
         .WillOnce(Return(false))
         .WillOnce(Return(true));
     EXPECT_CALL(*mock_game_play, buy_weapon)
         .WillOnce(Throw(ActionFromDeadPlayerException()));
-    ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
-        .WillByDefault(Return(COUNTER_TERRORIST));
 
     Interactions::init();
     Interactions::set_game_play(mock_game_play);
@@ -345,13 +355,14 @@ TEST(InteractionsTest, BuyAfterTimeLimitAssertions) {
 
     auto mock_game_play = make_shared<MockGamePlay>();
 
+    ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
+        .WillByDefault(Return(COUNTER_TERRORIST));
+
     EXPECT_CALL(*mock_game_play, has_ended())
         .WillOnce(Return(false))
         .WillOnce(Return(true));
     EXPECT_CALL(*mock_game_play, buy_weapon)
         .WillOnce(Throw(ActionAtIllegalTimeException()));
-    ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
-        .WillByDefault(Return(COUNTER_TERRORIST));
 
     Interactions::init();
     Interactions::set_game_play(mock_game_play);
@@ -371,13 +382,14 @@ TEST(InteractionsTest, BuyNonExistingWeaponAssertions) {
 
     auto mock_game_play = make_shared<MockGamePlay>();
 
+    ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
+        .WillByDefault(Return(COUNTER_TERRORIST));
+
     EXPECT_CALL(*mock_game_play, has_ended())
         .WillOnce(Return(false))
         .WillOnce(Return(true));
     EXPECT_CALL(*mock_game_play, buy_weapon)
         .WillOnce(Throw(NullPointerException("weapon")));
-    ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
-        .WillByDefault(Return(COUNTER_TERRORIST));
 
     Interactions::init();
     Interactions::set_game_play(mock_game_play);
@@ -397,13 +409,14 @@ TEST(InteractionsTest, BuyWeaponNotAvailableAssertions) {
 
     auto mock_game_play = make_shared<MockGamePlay>();
 
+    ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
+        .WillByDefault(Return(COUNTER_TERRORIST));
+
     EXPECT_CALL(*mock_game_play, has_ended())
         .WillOnce(Return(false))
         .WillOnce(Return(true));
     EXPECT_CALL(*mock_game_play, buy_weapon)
         .WillOnce(Throw(WeaponNotAvailableException()));
-    ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
-        .WillByDefault(Return(COUNTER_TERRORIST));
 
     Interactions::init();
     Interactions::set_game_play(mock_game_play);
@@ -424,13 +437,14 @@ TEST(InteractionsTest, BuyAlreadyEquippedAssertions) {
 
     auto mock_game_play = make_shared<MockGamePlay>();
 
+    ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
+        .WillByDefault(Return(COUNTER_TERRORIST));
+
     EXPECT_CALL(*mock_game_play, has_ended())
         .WillOnce(Return(false))
         .WillOnce(Return(true));
     EXPECT_CALL(*mock_game_play, buy_weapon)
         .WillOnce(Throw(WeaponOfThisTypeAlreadyEquippedException()));
-    ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
-        .WillByDefault(Return(COUNTER_TERRORIST));
 
     Interactions::init();
     Interactions::set_game_play(mock_game_play);
@@ -450,13 +464,14 @@ TEST(InteractionsTest, BuyNotEnoughMoneyAssertions) {
 
     auto mock_game_play = make_shared<MockGamePlay>();
 
+    ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
+        .WillByDefault(Return(COUNTER_TERRORIST));
+
     EXPECT_CALL(*mock_game_play, has_ended())
         .WillOnce(Return(false))
         .WillOnce(Return(true));
     EXPECT_CALL(*mock_game_play, buy_weapon)
         .WillOnce(Throw(NotEnoughMoneyException()));
-    ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
-        .WillByDefault(Return(COUNTER_TERRORIST));
 
     Interactions::init();
     Interactions::set_game_play(mock_game_play);
@@ -476,6 +491,9 @@ TEST(InteractionsTest, TapAssertions) {
 
     auto mock_game_play = make_shared<MockGamePlay>();
 
+    ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
+        .WillByDefault(Return(TERRORIST));
+
     EXPECT_CALL(*mock_game_play, has_ended)
         .WillOnce(Return(false))
         .WillOnce(Return(true));
@@ -483,8 +501,6 @@ TEST(InteractionsTest, TapAssertions) {
         .Times(1);
     EXPECT_CALL(*mock_game_play, attack_occurred("Attacker", "Attacked", HEAVY))
         .Times(1);
-    ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
-        .WillByDefault(Return(TERRORIST));
 
     Interactions::init();
     Interactions::set_game_play(mock_game_play);
@@ -504,13 +520,14 @@ TEST(InteractionsTest, TapNonExistingPlayerAssertions) {
 
     auto mock_game_play = make_shared<MockGamePlay>();
 
+    ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
+        .WillByDefault(Return(COUNTER_TERRORIST));
+
     EXPECT_CALL(*mock_game_play, has_ended)
         .WillOnce(Return(false))
         .WillOnce(Return(true));
     EXPECT_CALL(*mock_game_play, attack_occurred)
         .WillOnce(Throw(PlayerNotFoundException()));
-    ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
-        .WillByDefault(Return(COUNTER_TERRORIST));
 
     Interactions::init();
     Interactions::set_game_play(mock_game_play);
@@ -530,13 +547,14 @@ TEST(InteractionsTest, TapDeadAttackerAssertions) {
 
     auto mock_game_play = make_shared<MockGamePlay>();
 
+    ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
+        .WillByDefault(Return(COUNTER_TERRORIST));
+
     EXPECT_CALL(*mock_game_play, has_ended)
         .WillOnce(Return(false))
         .WillOnce(Return(true));
     EXPECT_CALL(*mock_game_play, attack_occurred)
         .WillOnce(Throw(ActionFromDeadPlayerException()));
-    ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
-        .WillByDefault(Return(COUNTER_TERRORIST));
 
     Interactions::init();
     Interactions::set_game_play(mock_game_play);
@@ -556,13 +574,14 @@ TEST(InteractionsTest, TapDeadAttackedAssertions) {
 
     auto mock_game_play = make_shared<MockGamePlay>();
 
+    ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
+        .WillByDefault(Return(COUNTER_TERRORIST));
+
     EXPECT_CALL(*mock_game_play, has_ended)
         .WillOnce(Return(false))
         .WillOnce(Return(true));
     EXPECT_CALL(*mock_game_play, attack_occurred)
         .WillOnce(Throw(AttackDeadPlayerException()));
-    ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
-        .WillByDefault(Return(COUNTER_TERRORIST));
 
     Interactions::init();
     Interactions::set_game_play(mock_game_play);
@@ -582,13 +601,14 @@ TEST(InteractionsTest, TapWeaponNotEquippedAssertions) {
 
     auto mock_game_play = make_shared<MockGamePlay>();
 
+    ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
+        .WillByDefault(Return(COUNTER_TERRORIST));
+
     EXPECT_CALL(*mock_game_play, has_ended)
         .WillOnce(Return(false))
         .WillOnce(Return(true));
     EXPECT_CALL(*mock_game_play, attack_occurred)
         .WillOnce(Throw(WeaponNotEquippedException()));
-    ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
-        .WillByDefault(Return(COUNTER_TERRORIST));
 
     Interactions::init();
     Interactions::set_game_play(mock_game_play);
@@ -608,13 +628,14 @@ TEST(InteractionsTest, TapFriendlyFireAssertions) {
 
     auto mock_game_play = make_shared<MockGamePlay>();
 
+    ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
+        .WillByDefault(Return(COUNTER_TERRORIST));
+
     EXPECT_CALL(*mock_game_play, has_ended)
         .WillOnce(Return(false))
         .WillOnce(Return(true));
     EXPECT_CALL(*mock_game_play, attack_occurred)
         .WillOnce(Throw(FriendlyFireException()));
-    ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
-        .WillByDefault(Return(COUNTER_TERRORIST));
 
     Interactions::init();
     Interactions::set_game_play(mock_game_play);
@@ -641,13 +662,6 @@ TEST(InteractionsTest, ScoreboardAssertions) {
     auto counter_terrorists = vector<shared_ptr<Player>> {mock_counter_terrorist1, mock_counter_terrorist2};
     auto terrorists = vector<shared_ptr<Player>> {mock_terrorist};
 
-    EXPECT_CALL(*mock_game_play, has_ended)
-        .WillOnce(Return(false))
-        .WillOnce(Return(true));
-    EXPECT_CALL(*mock_game_play, get_scoreboard(COUNTER_TERRORIST))
-        .WillOnce(Return(counter_terrorists));
-    EXPECT_CALL(*mock_game_play, get_scoreboard(TERRORIST))
-        .WillOnce(Return(terrorists));
     ON_CALL(*mock_game_play, determine_winner_and_go_next_round)
         .WillByDefault(Return(COUNTER_TERRORIST));
 
@@ -672,6 +686,14 @@ TEST(InteractionsTest, ScoreboardAssertions) {
     ON_CALL(*mock_terrorist, get_deaths)
         .WillByDefault(Return(3));
 
+    EXPECT_CALL(*mock_game_play, has_ended)
+        .WillOnce(Return(false))
+        .WillOnce(Return(true));
+    EXPECT_CALL(*mock_game_play, get_scoreboard(COUNTER_TERRORIST))
+        .WillOnce(Return(counter_terrorists));
+    EXPECT_CALL(*mock_game_play, get_scoreboard(TERRORIST))
+        .WillOnce(Return(terrorists));
+    
     Interactions::init();
     Interactions::set_game_play(mock_game_play);
     Interactions::begin();

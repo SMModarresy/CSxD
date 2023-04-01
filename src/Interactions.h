@@ -24,12 +24,16 @@ public:
     static void begin();
 
 private:
+    static void execute_command(Command command);
+    static void output_winner_and_go_next_round();
     static void add_user();
     static void get_health();
     static void get_money();
     static void buy();
     static void tap();
     static void scoreboard();
+    static void print_scoreboard(Side side);
+    static void update_round_time();
     static ull get_time_from_string(const string& time);
     static Command get_command_from_string(const string& command);
     static Side get_side_from_string(const string& side);

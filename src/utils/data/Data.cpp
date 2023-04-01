@@ -36,3 +36,12 @@ shared_ptr<Weapon> Data::get_weapon_by_name(const string& name) {
     }
     return weapons[name];
 }
+
+shared_ptr<Weapon> Data::try_get_weapon_by_name(const string& name) {
+    try {
+        return get_weapon_by_name(name);
+    }
+    catch (...) {
+        return nullptr;
+    }
+}

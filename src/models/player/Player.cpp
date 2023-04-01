@@ -23,12 +23,10 @@ void Player::take_damage(uint damage) {
     if (hp == 0) {
         return;
     }
-    if (damage >= hp) {
-        hp = 0;
+    hp -= min(damage, hp);
+    if (hp == 0) {
         deaths++;
-        return;
     }
-    hp -= damage;
 }
 
 void Player::reset_hp() {

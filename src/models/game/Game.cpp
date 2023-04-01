@@ -111,26 +111,43 @@ void Game::add_player(const shared_ptr<Player>& player) {
     if (player == nullptr) {
         throw NullPointerException("player");
     }
-    if (players.find(player->get_name()) != players.end()) {
-        auto old_player = players[player->get_name()];
-        if (old_player->get_side() == player->get_side()) {
-            throw PlayerAlreadyInTeamException();
-        }
-        else {
-            throw PlayerInOpponentTeamException();
-        }
-    }
+
+    check_player_can_be_added(player);
+
     if (player->get_side() == TERRORIST) {
-        if (terrorist_player_count >= max_team_size) {
-            throw TeamIsFullException();
-        }
         terrorist_player_count++;
     }
     if (player->get_side() == COUNTER_TERRORIST) {
-        if (counter_terrorist_player_count >= max_team_size) {
-            throw TeamIsFullException();
-        }
         counter_terrorist_player_count++;
     }
     players[player->get_name()] = player;
+}
+
+void Game::check_player_can_be_added(const shared_ptr<Player>& player) {
+    if (players.find(player->get_name()) != players.end()) {
+        handle_player_already_in_game(player);
+    }
+    if (is_team_full(player->get_side())) {
+        throw TeamIsFullException();
+    }
+}
+
+void Game::handle_player_already_in_game(const shared_ptr<Player>& player) {
+    auto old_player = players[player->get_name()];
+    if (old_player->get_side() == player->get_side()) {
+        throw PlayerAlreadyInTeamException();
+    }
+    else {
+        throw PlayerInOpponentTeamException();
+    }
+}
+
+bool Game::is_team_full(Side side) const {
+    if (side == TERRORIST) {
+        return terrorist_player_count >= max_team_size;
+    }
+    if (side == COUNTER_TERRORIST) {
+        return counter_terrorist_player_count >= max_team_size;
+    }
+    throw invalid_argument("side is invalid. should be one of: [COUNTER_TERRORIST, TERRORIST]");
 }

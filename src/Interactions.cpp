@@ -43,55 +43,70 @@ void Interactions::set_game_play(shared_ptr<GamePlay> game_play) {
 void Interactions::begin() {
     string command;
     uint command_count;
+
     while (!game_play->has_ended()) {
         *in >> command >> command_count;
+
         while (command_count--) {
             *in >> command;
-            switch (get_command_from_string(command)) {
-                case ADD_USER: {
-                    add_user();
-                    break;
-                }
-                case GET_HEALTH: {
-                    get_health();
-                    break;
-                }
-                case GET_MONEY: {
-                    get_money();
-                    break;
-                }
-                case BUY: {
-                    buy();
-                    break;
-                }
-                case TAP: {
-                    tap();
-                    break;
-                }
-                case SCORE_BOARD: {
-                    scoreboard();
-                    break;
-                }
-            }
+            execute_command(get_command_from_string(command));
         }
-        auto round_winner = game_play->determine_winner_and_go_next_round();
-        if (round_winner == COUNTER_TERRORIST) {
-            *out << "Counter-Terrorist won" << endl;
+
+        output_winner_and_go_next_round();
+    }
+}
+
+void Interactions::execute_command(Command command) {
+    switch (command) {
+        case ADD_USER: {
+            add_user();
+            break;
         }
-        else {
-            *out << "Terrorist won" << endl;
+        case GET_HEALTH: {
+            get_health();
+            break;
+        }
+        case GET_MONEY: {
+            get_money();
+            break;
+        }
+        case BUY: {
+            buy();
+            break;
+        }
+        case TAP: {
+            tap();
+            break;
+        }
+        case SCORE_BOARD: {
+            scoreboard();
+            break;
         }
     }
 }
 
-void Interactions::add_user() {
-    string name, side, time;
-    *in >> name >> side >> time;
-    game_play->set_round_time(get_time_from_string(time));
+void Interactions::output_winner_and_go_next_round() {
+    auto round_winner = game_play->determine_winner_and_go_next_round();
 
-    auto player = game_play->create_player(name, get_side_from_string(side));
+    if (round_winner == COUNTER_TERRORIST) {
+        *out << "Counter-Terrorist won" << endl;
+    }
+    else {
+        *out << "Terrorist won" << endl;
+    }
+}
+
+void Interactions::add_user() {
+    string name, side;
+    *in >> name >> side;
+
+    update_round_time();
+
     try {
+        auto player = game_play->create_player(name, get_side_from_string(side));
+
         game_play->add_player(player);
+
         *out << "this user added to " << side << endl;
     }
     catch (const PlayerAlreadyInTeamException& ex) {
@@ -103,12 +118,16 @@ void Interactions::add_user() {
     catch (const TeamIsFullException& ex) {
         *out << "this team is full" << endl;
     }
+    catch (...) {
+        *out << "unknown error" << endl;
+    }
 }
 
 void Interactions::get_health() {
-    string player_name, time;
-    *in >> player_name >> time;
-    game_play->set_round_time(get_time_from_string(time));
+    string player_name;
+    *in >> player_name;
+
+    update_round_time();
 
     try {
         *out << game_play->get_hp(player_name) << endl;
@@ -116,12 +135,16 @@ void Interactions::get_health() {
     catch (const PlayerNotFoundException& ex) {
         *out << "invalid username" << endl;
     }
+    catch (...) {
+        *out << "unknown error" << endl;
+    }
 }
 
 void Interactions::get_money() {
-    string player_name, time;
-    *in >> player_name >> time;
-    game_play->set_round_time(get_time_from_string(time));
+    string player_name;
+    *in >> player_name;
+
+    update_round_time();
 
     try {
         *out << game_play->get_money(player_name) << endl;
@@ -129,20 +152,22 @@ void Interactions::get_money() {
     catch (const PlayerNotFoundException& ex) {
         *out << "invalid username" << endl;
     }
+    catch (...) {
+        *out << "unknown error" << endl;
+    }
 }
 
 void Interactions::buy() {
-    string player_name, weapon_name, time;
-    *in >> player_name >> weapon_name >> time;
-    game_play->set_round_time(get_time_from_string(time));
+    string player_name, weapon_name;
+    *in >> player_name >> weapon_name;
 
-    shared_ptr<Weapon> weapon;
-    try {
-        weapon = Data::get_weapon_by_name(weapon_name);
-    }
-    catch (...) { }
+    update_round_time();
+
+    shared_ptr<Weapon> weapon = Data::try_get_weapon_by_name(weapon_name);
+
     try {
         game_play->buy_weapon(player_name, weapon);
+
         *out << "I hope you can use it" << endl;
     }
     catch (const PlayerNotFoundException& ex) {
@@ -166,15 +191,20 @@ void Interactions::buy() {
     catch (const NotEnoughMoneyException& ex) {
         *out << "no enough money" << endl;
     }
+    catch (...) {
+        *out << "unknown error" << endl;
+    }
 }
 
 void Interactions::tap() {
-    string attacker_name, attacked_name, weapon_type, time;
-    *in >> attacker_name >> attacked_name >> weapon_type >> time;
-    game_play->set_round_time(get_time_from_string(time));
+    string attacker_name, attacked_name, weapon_type;
+    *in >> attacker_name >> attacked_name >> weapon_type;
+
+    update_round_time();
 
     try {
         game_play->attack_occurred(attacker_name, attacked_name, get_weapon_type_from_string(weapon_type));
+
         *out << "nice shot" << endl;
     }
     catch (const PlayerNotFoundException& ex) {
@@ -192,23 +222,32 @@ void Interactions::tap() {
     catch (const FriendlyFireException& ex) {
         *out << "friendly fire" << endl;
     }
+    catch (...) {
+        *out << "unknown error" << endl;
+    }
 }
 
 void Interactions::scoreboard() {
+    update_round_time();
+
+    *out << "Counter-Terrorist-Players:" << endl;
+    print_scoreboard(COUNTER_TERRORIST);
+
+    *out << "Terrorist-Players:" << endl;
+    print_scoreboard(TERRORIST);
+}
+
+void Interactions::print_scoreboard(Side side) {
+    uint rank = 1;
+    for(const auto& player : game_play->get_scoreboard(side)) {
+        *out << rank++ << " " << player->get_name() << " " << player->get_kills() << " " << player->get_deaths() << endl;
+    }
+}
+
+void Interactions::update_round_time() {
     string time;
     *in >> time;
     game_play->set_round_time(get_time_from_string(time));
-
-    *out << "Counter-Terrorist-Players:" << endl;
-    uint rank = 1;
-    for(const auto& player : game_play->get_scoreboard(COUNTER_TERRORIST)) {
-        *out << rank++ << " " << player->get_name() << " " << player->get_kills() << " " << player->get_deaths() << endl;
-    }
-    *out << "Terrorist-Players:" << endl;
-    rank = 1;
-    for(const auto& player : game_play->get_scoreboard(TERRORIST)) {
-        *out << rank++ << " " << player->get_name() << " " << player->get_kills() << " " << player->get_deaths() << endl;
-    }
 }
 
 ull Interactions::get_time_from_string(const string& time) {

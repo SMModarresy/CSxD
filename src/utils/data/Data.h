@@ -14,6 +14,7 @@ class Data {
 public:
     static void load();
     static shared_ptr<Weapon> get_weapon_by_name(const string& name);
+    static shared_ptr<Weapon> try_get_weapon_by_name(const string& name);
 
 private:
     static void load_weapons();

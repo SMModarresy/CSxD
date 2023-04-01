@@ -81,7 +81,7 @@ TEST(GamePlayTest, AddPlayerAssertions) {
         .Times(2)
         .WillRepeatedly(Return("Player"));
     EXPECT_CALL(*mock_player, get_side)
-        .Times(2)
+        .Times(3)
         .WillRepeatedly(Return(TERRORIST));
 
     game_play.add_player(mock_player);
@@ -99,7 +99,7 @@ TEST(GamePlayTest, AddSamePlayerTwiceAssertions) {
     auto mock_player2 = make_shared<MockPlayer>();
 
     EXPECT_CALL(*mock_player1, get_side)
-        .Times(4)
+        .Times(5)
         .WillRepeatedly(Return(TERRORIST));
     EXPECT_CALL(*mock_player2, get_side)
         .Times(2)
@@ -127,6 +127,9 @@ TEST(GamePlayTest, GetHpAssertions) {
     GamePlay game_play(10);
     auto mock_player = make_shared<MockPlayer>();
 
+    ON_CALL(*mock_player, get_side)
+        .WillByDefault(Return(TERRORIST));
+
     game_play.add_player(mock_player);
 
     EXPECT_CALL(*mock_player, get_hp)
@@ -144,6 +147,9 @@ TEST(GamePlayTest, GetHpNonExistingPlayerAssertions) {
 TEST(GamePlayTest, GetMoneyAssertions) {
     GamePlay game_play(10);
     auto mock_player = make_shared<MockPlayer>();
+
+    ON_CALL(*mock_player, get_side)
+        .WillByDefault(Return(TERRORIST));
 
     game_play.add_player(mock_player);
 
@@ -164,6 +170,9 @@ TEST(GamePlayTest, BuyWeaponPlayerAssertions) {
     GamePlay game_play(10);
     auto mock_player = make_shared<MockPlayer>();
     auto weapon = Data::get_weapon_by_name("Glock-18");
+
+    ON_CALL(*mock_player, get_side)
+        .WillByDefault(Return(TERRORIST));
 
     game_play.add_player(mock_player);
 
@@ -212,6 +221,9 @@ TEST(GamePlayTest, BuyWeaponDeadPlayerAssertions) {
     auto mock_player = make_shared<MockPlayer>();
     auto mock_weapon = make_shared<MockWeapon>();
 
+    ON_CALL(*mock_player, get_side)
+        .WillByDefault(Return(TERRORIST));
+
     game_play.add_player(mock_player);
 
     EXPECT_CALL(*mock_player, is_alive)
@@ -226,8 +238,6 @@ TEST(GamePlayTest, BuyWeaponAfterTimeLimitAssertions) {
     auto mock_player = make_shared<MockPlayer>();
     auto mock_weapon = make_shared<MockWeapon>();
 
-    game_play.add_player(mock_player);
-
     ON_CALL(*mock_game, get_round_time)
         .WillByDefault(Return(45 * 1000));
     ON_CALL(*mock_game, get_player_by_name)
@@ -241,6 +251,8 @@ TEST(GamePlayTest, BuyWeaponAfterTimeLimitAssertions) {
     ON_CALL(*mock_weapon, is_available_for)
         .WillByDefault(Return(true));
 
+    game_play.add_player(mock_player);
+
     EXPECT_THROW(game_play.buy_weapon("", mock_weapon), ActionAtIllegalTimeException);
 }
 
@@ -248,10 +260,12 @@ TEST(GamePlayTest, BuyNullWeaponAssertions) {
     GamePlay game_play(10);
     auto mock_player = make_shared<MockPlayer>();
 
-    game_play.add_player(mock_player);
-
+    ON_CALL(*mock_player, get_side)
+        .WillByDefault(Return(TERRORIST));
     ON_CALL(*mock_player, is_alive)
         .WillByDefault(Return(true));
+
+    game_play.add_player(mock_player);
 
     EXPECT_THROW(game_play.buy_weapon("", nullptr), NullPointerException);
 }
@@ -261,10 +275,12 @@ TEST(GamePlayTest, BuyWeaponNotAvailableAssertions) {
     auto mock_player = make_shared<MockPlayer>();
     auto mock_weapon = make_shared<MockWeapon>();
 
-    game_play.add_player(mock_player);
-
+    ON_CALL(*mock_player, get_side)
+        .WillByDefault(Return(TERRORIST));
     ON_CALL(*mock_player, is_alive)
         .WillByDefault(Return(true));
+
+    game_play.add_player(mock_player);
 
     EXPECT_CALL(*mock_weapon, is_available_for)
         .WillOnce(Return(false));
@@ -277,15 +293,18 @@ TEST(GamePlayTest, BuyWeaponAlreadyEquippedAssertions) {
     auto mock_player = make_shared<MockPlayer>();
     auto mock_weapon = make_shared<MockWeapon>();
 
-    game_play.add_player(mock_player);
-
+    ON_CALL(*mock_player, get_side)
+        .WillByDefault(Return(TERRORIST));
     ON_CALL(*mock_player, is_alive)
         .WillByDefault(Return(true));
-    EXPECT_CALL(*mock_player, get_weapon)
-        .WillOnce(Return(mock_weapon));
 
     ON_CALL(*mock_weapon, is_available_for)
         .WillByDefault(Return(true));
+
+    game_play.add_player(mock_player);
+
+    EXPECT_CALL(*mock_player, get_weapon)
+        .WillOnce(Return(mock_weapon));
 
     EXPECT_THROW(game_play.buy_weapon("", mock_weapon), WeaponOfThisTypeAlreadyEquippedException);
 }
@@ -295,19 +314,22 @@ TEST(GamePlayTest, BuyWeaponNoMoneyAssertions) {
     auto mock_player = make_shared<MockPlayer>();
     auto mock_weapon = make_shared<MockWeapon>();
 
-    game_play.add_player(mock_player);
-
+    ON_CALL(*mock_player, get_side)
+        .WillByDefault(Return(TERRORIST));
     ON_CALL(*mock_player, is_alive)
         .WillByDefault(Return(true));
     ON_CALL(*mock_player, get_weapon)
         .WillByDefault(Throw(WeaponNotEquippedException()));
-    EXPECT_CALL(*mock_player, subtract_money(1000))
-        .WillRepeatedly(Throw(NotEnoughMoneyException()));
 
     ON_CALL(*mock_weapon, is_available_for)
         .WillByDefault(Return(true));
     ON_CALL(*mock_weapon, get_price)
         .WillByDefault(Return(1000));
+
+    game_play.add_player(mock_player);
+
+    EXPECT_CALL(*mock_player, subtract_money(1000))
+        .WillRepeatedly(Throw(NotEnoughMoneyException()));
 
     EXPECT_THROW(game_play.buy_weapon("", mock_weapon), NotEnoughMoneyException);
 }
@@ -323,23 +345,26 @@ TEST(GamePlayTest, AttackOccurredPlayerAssertions) {
         .WillByDefault(Return("Attacker"));
     ON_CALL(*mock_attacker, get_side)
         .WillByDefault(Return(TERRORIST));
-    EXPECT_CALL(*mock_attacker, is_alive)
-        .WillOnce(Return(true));
-    EXPECT_CALL(*mock_attacker, get_weapon(weapon->get_type()))
-        .WillOnce(Return(weapon));
 
     ON_CALL(*mock_attacked, get_name)
         .WillByDefault(Return("Attacked"));
     ON_CALL(*mock_attacked, get_side)
         .WillByDefault(Return(COUNTER_TERRORIST));
+
+    game_play.add_player(mock_attacker);
+    game_play.add_player(mock_attacked);
+
+    EXPECT_CALL(*mock_attacker, is_alive)
+        .WillOnce(Return(true));
+    EXPECT_CALL(*mock_attacker, get_weapon(weapon->get_type()))
+        .Times(2)
+        .WillRepeatedly(Return(weapon));
+
     EXPECT_CALL(*mock_attacked, is_alive)
         .Times(2)
         .WillRepeatedly(Return(true));
     EXPECT_CALL(*mock_attacked, take_damage(weapon->get_damage_per_hit()))
         .Times(1);
-
-    game_play.add_player(mock_attacker);
-    game_play.add_player(mock_attacked);
 
     game_play.attack_occurred("Attacker", "Attacked", weapon->get_type());
 }
@@ -355,19 +380,25 @@ TEST(GamePlayTest, AttackOccurredPlayerDiesAssertions) {
         .WillByDefault(Return("Attacker"));
     ON_CALL(*mock_attacker, get_side)
         .WillByDefault(Return(TERRORIST));
-    EXPECT_CALL(*mock_attacker, is_alive)
-        .WillOnce(Return(true));
-    EXPECT_CALL(*mock_attacker, get_weapon(weapon->get_type()))
-        .WillOnce(Return(weapon));
-    EXPECT_CALL(*mock_attacker, add_kill)
-        .Times(1);
-    EXPECT_CALL(*mock_attacker, add_money(weapon->get_money_per_kill()))
-        .Times(1);
 
     ON_CALL(*mock_attacked, get_name)
         .WillByDefault(Return("Attacked"));
     ON_CALL(*mock_attacked, get_side)
         .WillByDefault(Return(COUNTER_TERRORIST));
+
+    game_play.add_player(mock_attacker);
+    game_play.add_player(mock_attacked);
+
+    EXPECT_CALL(*mock_attacker, is_alive)
+        .WillOnce(Return(true));
+    EXPECT_CALL(*mock_attacker, get_weapon(weapon->get_type()))
+        .Times(2)
+        .WillRepeatedly(Return(weapon));
+    EXPECT_CALL(*mock_attacker, add_kill)
+        .Times(1);
+    EXPECT_CALL(*mock_attacker, add_money(weapon->get_money_per_kill()))
+        .Times(1);
+
     EXPECT_CALL(*mock_attacked, is_alive)
         .WillOnce(Return(true))
         .WillOnce(Return(false));
@@ -377,9 +408,6 @@ TEST(GamePlayTest, AttackOccurredPlayerDiesAssertions) {
         .Times(1);
     EXPECT_CALL(*mock_attacked, drop_weapon(HEAVY))
         .Times(1);
-
-    game_play.add_player(mock_attacker);
-    game_play.add_player(mock_attacked);
 
     game_play.attack_occurred("Attacker", "Attacked", weapon->get_type());
 }
@@ -396,6 +424,8 @@ TEST(GamePlayTest, AttackOccurredNonExistingAttackedAssertions) {
 
     ON_CALL(*mock_attacker, get_name)
         .WillByDefault(Return("Attacker"));
+    ON_CALL(*mock_attacker, get_side)
+        .WillByDefault(Return(TERRORIST));
 
     game_play.add_player(mock_attacker);
 
@@ -409,11 +439,15 @@ TEST(GamePlayTest, AttackOccurredDeadAttackerAssertions) {
 
     ON_CALL(*mock_attacker, get_name)
         .WillByDefault(Return("Attacker"));
+    ON_CALL(*mock_attacker, get_side)
+        .WillByDefault(Return(TERRORIST));
     ON_CALL(*mock_attacker, is_alive)
         .WillByDefault(Return(false));
 
     ON_CALL(*mock_attacked, get_name)
         .WillByDefault(Return("Attacked"));
+    ON_CALL(*mock_attacked, get_side)
+        .WillByDefault(Return(COUNTER_TERRORIST));
 
     game_play.add_player(mock_attacker);
     game_play.add_player(mock_attacked);
@@ -428,11 +462,15 @@ TEST(GamePlayTest, AttackOccurredDeadAttackedAssertions) {
 
     ON_CALL(*mock_attacker, get_name)
         .WillByDefault(Return("Attacker"));
+    ON_CALL(*mock_attacker, get_side)
+        .WillByDefault(Return(TERRORIST));
     ON_CALL(*mock_attacker, is_alive)
         .WillByDefault(Return(true));
 
     ON_CALL(*mock_attacked, get_name)
         .WillByDefault(Return("Attacked"));
+    ON_CALL(*mock_attacked, get_side)
+        .WillByDefault(Return(COUNTER_TERRORIST));
     ON_CALL(*mock_attacked, is_alive)
         .WillByDefault(Return(false));
 
@@ -449,6 +487,9 @@ TEST(GamePlayTest, AttackOccurredWeaponNotEquippedAssertions) {
 
     ON_CALL(*mock_attacker, get_name)
         .WillByDefault(Return("Attacker"));
+    ON_CALL(*mock_attacker, get_side)
+        .WillByDefault(Return(TERRORIST));
+
     ON_CALL(*mock_attacker, is_alive)
         .WillByDefault(Return(true));
     ON_CALL(*mock_attacker, get_weapon)
@@ -456,6 +497,8 @@ TEST(GamePlayTest, AttackOccurredWeaponNotEquippedAssertions) {
 
     ON_CALL(*mock_attacked, get_name)
         .WillByDefault(Return("Attacked"));
+    ON_CALL(*mock_attacked, get_side)
+        .WillByDefault(Return(COUNTER_TERRORIST));
     ON_CALL(*mock_attacked, is_alive)
         .WillByDefault(Return(true));
 

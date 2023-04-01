@@ -36,6 +36,10 @@ public:
     virtual void add_player(const shared_ptr<Player>& player);
 
 protected:
+    void check_player_can_be_added(const shared_ptr<Player>& player);
+    void handle_player_already_in_game(const shared_ptr<Player>& player);
+    bool is_team_full(Side side) const;
+
     ull id;
     uint rounds;
     uint current_round;
