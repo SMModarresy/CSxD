@@ -14,6 +14,8 @@
 
 using namespace std;
 
+typedef unsigned long long ull;
+
 class Interactions {
 public:
     static void set_input_stream(istream& stream);

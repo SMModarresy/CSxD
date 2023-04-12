@@ -12,6 +12,8 @@
 
 using namespace std;
 
+typedef unsigned long long ull;
+
 class GamePlay {
 public:
     explicit GamePlay(shared_ptr<Game> for_game);
@@ -52,7 +54,6 @@ protected:
     const size_t MAX_TEAM_SIZE = 10;
 
     shared_ptr<Game> game;
-
 };
 
 
