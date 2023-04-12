@@ -1,51 +1,6 @@
 add_executable(
     CSxD
     main.cpp
-    exceptions/ActionAtIllegalTimeException.h
-    exceptions/ActionAtIllegalTimeException.cpp
-    exceptions/ActionFromDeadPlayerException.h
-    exceptions/ActionFromDeadPlayerException.cpp
-    exceptions/AttackDeadPlayerException.h
-    exceptions/AttackDeadPlayerException.cpp
-    exceptions/FriendlyFireException.h
-    exceptions/FriendlyFireException.cpp
-    exceptions/LastRoundException.h
-    exceptions/LastRoundException.cpp
-    exceptions/NotEnoughMoneyException.h
-    exceptions/NotEnoughMoneyException.cpp
-    exceptions/NullPointerException.h
-    exceptions/NullPointerException.cpp
-    exceptions/PlayerAlreadyInTeamException.h
-    exceptions/PlayerAlreadyInTeamException.cpp
-    exceptions/PlayerInOpponentTeamException.h
-    exceptions/PlayerInOpponentTeamException.cpp
-    exceptions/PlayerNotFoundException.h
-    exceptions/PlayerNotFoundException.cpp
-    exceptions/TeamIsFullException.h
-    exceptions/TeamIsFullException.cpp
-    exceptions/WeaponNotAvailableException.h
-    exceptions/WeaponNotAvailableException.cpp
-    exceptions/WeaponNotEquippedException.h
-    exceptions/WeaponNotEquippedException.cpp
-    exceptions/WeaponNotFoundException.h
-    exceptions/WeaponNotFoundException.cpp
-    exceptions/WeaponOfThisTypeAlreadyEquippedException.h
-    exceptions/WeaponOfThisTypeAlreadyEquippedException.cpp
-    models/weapon/WeaponType.h
-    models/weapon/Weapon.h
-    models/weapon/Weapon.cpp
-    models/player/Side.h
-    models/player/Player.h
-    models/player/Player.cpp
-    models/game/Game.h
-    models/game/Game.cpp
-    utils/data/Data.h
-    utils/data/Data.cpp
-    GamePlay.h
-    GamePlay.cpp
-    Command.h
-    Interactions.h
-    Interactions.cpp
 )
 #set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_GLIBCXX_DEBUG")
 add_library(
@@ -101,6 +56,7 @@ find_package(nlohmann_json REQUIRED)
 
 target_link_libraries(
     CSxD
+    CSxDLib
     nlohmann_json::nlohmann_json
 )
 
